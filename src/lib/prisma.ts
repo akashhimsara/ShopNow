@@ -1,5 +1,5 @@
 //Utility functions, helpers, and Prisma singleton
-
+//uses the generated client to run queries against the database
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
