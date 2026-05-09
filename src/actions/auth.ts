@@ -42,7 +42,10 @@ export async function register(formData: FormData): Promise<RegisterResult> {
   } catch (err) {
     if (err instanceof z.ZodError) {
       const fieldErrors = Object.fromEntries(
-        Object.entries(err.flatten().fieldErrors).map(([k, v]) => [k, v?.join(' ') ?? 'Invalid'])
+        Object.entries(err.flatten().fieldErrors).map(([k, v]) => [
+          k,
+          Array.isArray(v) ? v.join(' ') : 'Invalid',
+        ])
       ) as Record<string, string>;
       return { success: false, errors: fieldErrors };
     }

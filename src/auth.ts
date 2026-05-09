@@ -1,5 +1,4 @@
-import NextAuth from 'next-auth';
-import type { Provider } from 'next-auth/providers';
+import NextAuth, { type NextAuthOptions } from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -8,7 +7,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
-const providers: Provider[] = [];
+const providers: NextAuthOptions['providers'] = [];
 
 // OAuth providers (GitHub, Google) - only add when env vars are present
 if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
@@ -56,7 +55,7 @@ providers.push(
   })
 );
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'database',
@@ -65,4 +64,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/login',
   },
-});
+};
+
+export default NextAuth(authOptions);
